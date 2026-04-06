@@ -1,6 +1,16 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using Microsoft.EntityFrameworkCore;
+using SalesWeb.Data;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<SalesWebContext>(options =>
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("SalesWebContext"),
+        x => x.MigrationsAssembly("SalesWeb")));
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
