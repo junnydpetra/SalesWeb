@@ -1,0 +1,35 @@
+﻿@model IEnumerable<SalesWeb.Models.Seller>
+
+@{
+    ViewData["Title"] = "Sellers";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-stripped table-hover">
+    <thead>
+        <tr class="bg-success">
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.Email)</th>
+            <th>@Html.DisplayNameFor(model => model.BirthDate)</th>
+            <th>@Html.DisplayNameFor(model => model.BaseSalary)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var seller in Model)
+        {
+            <tr>
+                <td>@seller.Name</td>
+                <td>@seller.Email</td>
+                <td>@seller.BirthDate.ToString("dd/MM/yyyy")</td>
+                <td>@seller.BaseSalary.ToString("F2")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@seller.Id" class="btn btn-outline-info">Edit</a>
+                    <a asp-action="Details" asp-route-id="@seller.Id" class="btn btn-outline-success">Details</a>
+                    <a asp-action="Edit" asp-route-id="@seller.Id" class="btn btn-outline-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
