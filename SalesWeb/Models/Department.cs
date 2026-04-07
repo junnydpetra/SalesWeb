@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace SalesWeb.Models
 {
     public class Department
@@ -10,6 +12,7 @@ namespace SalesWeb.Models
         {
         }
 
+        [SetsRequiredMembers]
         public Department(int id, string name)
         {
             Id = id;
