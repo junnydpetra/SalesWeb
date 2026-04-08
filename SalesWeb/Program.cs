@@ -11,10 +11,18 @@ builder.Services.AddDbContext<SalesWebContext>(options =>
         x => x.MigrationsAssembly("SalesWeb")));
 
 builder.Services.AddScoped<SellersService>();
+builder.Services.AddScoped<SeedingService>();
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
+    var seedingService = scope.ServiceProvider.GetRequiredService<SeedingService>();
+    seedingService.Seed();
+}
 
 if (!app.Environment.IsDevelopment())
 {

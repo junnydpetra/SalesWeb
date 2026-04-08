@@ -38,17 +38,6 @@ namespace SalesWeb.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Seller obj)
         {
-            Console.WriteLine("=== ENTROU NO POST CREATE ===");
-
-            Console.WriteLine($"Id: {obj.Id}");
-            Console.WriteLine($"Name: {obj.Name}");
-            Console.WriteLine($"Email: {obj.Email}");
-            Console.WriteLine($"BirthDate: {obj.BirthDate}");
-            Console.WriteLine($"BaseSalary: {obj.BaseSalary}");
-            Console.WriteLine($"DepartmentId: {obj.DepartmentId}");
-
-            Console.WriteLine($"ModelState.IsValid: {ModelState.IsValid}");
-
             foreach (var kvp in ModelState)
             {
                 foreach (var error in kvp.Value.Errors)
