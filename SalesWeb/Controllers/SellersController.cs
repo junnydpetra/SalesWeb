@@ -42,20 +42,6 @@ namespace SalesWeb.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Seller seller)
         {
-            //foreach (var kvp in ModelState)
-            //{
-            //    foreach (var error in kvp.Value.Errors)
-            //    {
-            //        Console.WriteLine($"Campo: {kvp.Key} | Erro: {error.ErrorMessage}");
-            //    }
-            //}
-
-            //if (!ModelState.IsValid)
-            //{
-            //    ViewBag.Departments = new SelectList(_context.Department, "Id", "Name", obj.DepartmentId);
-            //    return View(obj);
-            //}
-
             _sellersService.Insert(seller);
             return RedirectToAction(nameof(Index));
         }
@@ -63,6 +49,30 @@ namespace SalesWeb.Controllers
         public IActionResult Edit(int id)
         {
             return View();
+        }
+
+        public IActionResult Delete(int? id) 
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var seller = _sellersService.FindById(id.Value);
+            if (seller == null)
+            {
+                return NotFound();              
+            }
+
+            return View(seller);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        { 
+            _sellersService.Remove(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
