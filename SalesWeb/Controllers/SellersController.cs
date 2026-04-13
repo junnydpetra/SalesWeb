@@ -6,6 +6,7 @@ using SalesWeb.Models.ViewModels;
 using SalesWeb.Services;
 using SalesWeb.Services.Exceptions;
 using System.Data;
+using System.Diagnostics;
 
 namespace SalesWeb.Controllers
 {
@@ -31,8 +32,9 @@ namespace SalesWeb.Controllers
             var seller = _sellersService.FindById(id);
             if (seller == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Seller not found" });
             }
+
             return View(seller);
         }
 
@@ -56,13 +58,13 @@ namespace SalesWeb.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided!" });
             }
 
             var seller = _sellersService.FindById(id.Value);
             if (seller == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Seller not found!" });
             }
 
             List<Department> departments = _departmentService.FindAll();
@@ -71,17 +73,17 @@ namespace SalesWeb.Controllers
             return View(viewModel);
         }
 
-        public IActionResult Delete(int? id) 
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided!" });
             }
 
             var seller = _sellersService.FindById(id.Value);
             if (seller == null)
             {
-                return NotFound();              
+                return RedirectToAction(nameof(Error), new { message = "Seller not found!" });
             }
 
             return View(seller);
@@ -90,7 +92,7 @@ namespace SalesWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
-        { 
+        {
             _sellersService.Remove(id);
             return RedirectToAction(nameof(Index));
         }
@@ -101,21 +103,27 @@ namespace SalesWeb.Controllers
         {
             if (id != seller.Id)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id mismatch" });
             }
             try
             {
                 _sellersService.Update(seller);
                 return RedirectToAction(nameof(Index));
             }
-            catch (NotFoundException)
+            catch (ApplicationException e)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = e.Message });
             }
-            catch (DBConcurrencyException)
+        }
+
+        public IActionResult Error(string message)
+        {
+            var viewModel = new ErrorViewModel
             {
-                return BadRequest();
-            }
+                Message = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            };
+            return View(viewModel);
         }
     }
 }
