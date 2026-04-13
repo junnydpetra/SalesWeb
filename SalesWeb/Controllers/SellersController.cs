@@ -16,7 +16,6 @@ namespace SalesWeb.Controllers
         {
             _sellersService = sellersService;
             _departmentService = departmentService;
-            //_context = context;
         }
 
         public IActionResult Index()
@@ -27,7 +26,12 @@ namespace SalesWeb.Controllers
 
         public IActionResult Details(int id)
         {
-            return View();
+            var seller = _sellersService.FindById(id);
+            if (seller == null)
+            {
+                return NotFound();
+            }
+            return View(seller);
         }
 
         public IActionResult Create()
