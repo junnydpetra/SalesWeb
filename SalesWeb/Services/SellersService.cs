@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SalesWeb.Data;
 using SalesWeb.Models;
+using SalesWeb.Services.Exceptions;
 
 namespace SalesWeb.Services
 {
@@ -28,6 +29,23 @@ namespace SalesWeb.Services
         {
             return _context.Seller.Include(seller => seller.Department)
                                   .FirstOrDefault(seller => seller.Id == id);
+        }
+
+        public void Update(Seller seller)
+        {
+            if (!_context.Seller.Any(s => s.Id == seller.Id))
+            {
+                throw new NotFoundException("Seller not found!");
+            }
+            try
+            {
+                _context.Update(seller);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw new DbConcurrencyException(ex.Message);
+            }
         }
 
         public void Remove(int id)
