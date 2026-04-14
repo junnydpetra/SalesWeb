@@ -14,33 +14,35 @@ namespace SalesWeb.Services
             _context = context;
         }
 
-        public List<Seller> FindAll()
+        public async Task<List<Seller>> FindAllAsync()
         {
-            return _context.Seller.ToList();
+            return await _context.Seller.ToListAsync();
         }
 
-        public void Insert(Seller seller)
+        public async Task InsertAsync(Seller seller)
         {
             _context.Add(seller);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public Seller? FindById(int id)
+        public async Task<Seller?> FindByIdAsync(int id)
         {
-            return _context.Seller.Include(seller => seller.Department)
-                                  .FirstOrDefault(seller => seller.Id == id);
+            return await _context.Seller.Include(seller => seller.Department)
+                                        .FirstOrDefaultAsync(seller => seller.Id == id);
         }
 
-        public void Update(Seller seller)
+        public async Task UpdateAsync(Seller seller)
         {
-            if (!_context.Seller.Any(s => s.Id == seller.Id))
+            bool hasAny = await _context.Seller.AnyAsync(s => s.Id == seller.Id);
+
+            if (!hasAny)
             {
                 throw new NotFoundException("Seller not found!");
             }
             try
             {
                 _context.Update(seller);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -48,14 +50,14 @@ namespace SalesWeb.Services
             }
         }
 
-        public void Remove(int id)
+        public async Task RemoveAsync(int id)
         {
-            var seller = _context.Seller.Find(id);
+            var seller = await _context.Seller.FindAsync(id);
 
             if (seller != null)
             {
                 _context.Seller.Remove(seller);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
     }
