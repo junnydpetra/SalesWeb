@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Sales Records";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-8 col-lg-6">
+        <form asp-action="SimpleSearch">
+            <fieldset>
+                <legend>Simple Search</legend>
+
+                <div class="mb-3">
+                    <label for="minDate" class="form-label">Min Date</label>
+                    <input type="date" name="minDate" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="maxDate" class="form-label">Max Date</label>
+                    <input type="date" name="maxDate" class="form-control" />
+                </div>
+
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </fieldset>
+        </form>
+        <form asp-action="GroupingSearch">
+            <fieldset>
+                <legend>Grouping Search</legend>
+
+                <div class="mb-3">
+                    <label for="minDate" class="form-label">Min Date</label>
+                    <input type="date" name="minDate" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="maxDate" class="form-label">Max Date</label>
+                    <input type="date" name="maxDate" class="form-control" />
+                </div>
+
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
